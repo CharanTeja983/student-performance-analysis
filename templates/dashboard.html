@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Dashboard | Student Performance{% endblock %}
+{% block content %}
+<section class="page-heading">
+  <div><p class="eyebrow">OVERVIEW</p><h1>Academic Dashboard</h1><p class="muted">A quick view of student results and academic support needs.</p></div>
+  <a class="button" href="{{ url_for('add_student') }}">+ Register Student</a>
+</section>
+<div class="stats-grid">
+  <article class="stat-card"><span>Registered students</span><strong>{{ total_students }}</strong></article>
+  <article class="stat-card"><span>Marks entries</span><strong>{{ total_records }}</strong></article>
+  <article class="stat-card"><span>Average percentage</span><strong>{{ overall_average }}%</strong></article>
+  <article class="stat-card"><span>Pass entries</span><strong>{{ pass_percentage }}%</strong></article>
+</div>
+<div class="two-column">
+  <section class="panel"><h2>Subject averages</h2><img class="chart" src="{{ url_for('subject_chart') }}" alt="Bar chart of average percentages by subject"></section>
+  <section class="panel"><h2>Pass distribution</h2><img class="chart" src="{{ url_for('pass_fail_chart') }}" alt="Pie chart of pass and below-pass marks entries"></section>
+</div>
+<div class="two-column">
+  <section class="panel">
+    <h2>Top performers</h2>
+    {% if toppers %}<div class="table-wrap"><table><thead><tr><th>Student</th><th>Roll no.</th><th>Average</th></tr></thead><tbody>
+    {% for s in toppers %}<tr><td>{{ s.full_name }}</td><td>{{ s.roll_number }}</td><td>{{ s.average_percentage }}%</td></tr>{% endfor %}
+    </tbody></table></div>{% else %}<p class="empty">Add student marks to see top performers.</p>{% endif %}
+  </section>
+  <section class="panel">
+    <h2>Students needing support</h2>
+    {% if low_performers %}<div class="table-wrap"><table><thead><tr><th>Student</th><th>Roll no.</th><th>Average</th></tr></thead><tbody>
+    {% for s in low_performers %}<tr><td>{{ s.full_name }}</td><td>{{ s.roll_number }}</td><td><span class="pill danger">{{ s.average_percentage }}%</span></td></tr>{% endfor %}
+    </tbody></table></div>{% else %}<p class="empty">No students below 50% average, or no marks have been entered.</p>{% endif %}
+  </section>
+</div>
+{% endblock %}

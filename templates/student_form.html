@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}{{ 'Edit' if student else 'Register' }} Student{% endblock %}
+{% block content %}
+<section class="page-heading"><div><p class="eyebrow">STUDENT DETAILS</p><h1>{{ 'Edit student' if student else 'Register a student' }}</h1></div></section>
+<section class="panel form-panel">
+<form method="post">
+  <label>Roll number <input name="roll_number" required maxlength="30" value="{{ student.roll_number if student else '' }}" placeholder="e.g. 24CSE001"></label>
+  <label>Full name <input name="full_name" required maxlength="120" value="{{ student.full_name if student else '' }}" placeholder="Student full name"></label>
+  <label>Class / section <input name="class_name" required maxlength="40" value="{{ student.class_name if student else '' }}" placeholder="e.g. B.Tech CSE - 2A"></label>
+  <label>Email (optional) <input name="email" type="email" maxlength="150" value="{{ student.email if student and student.email else '' }}" placeholder="student@example.com"></label>
+  <div class="form-actions"><button class="button" type="submit">Save student</button><a class="button secondary" href="{{ url_for('students') }}">Cancel</a></div>
+</form>
+</section>
+{% endblock %}

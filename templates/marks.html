@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Marks | Student Performance{% endblock %}
+{% block content %}
+<section class="page-heading"><div><p class="eyebrow">ASSESSMENTS</p><h1>Marks management</h1><p class="muted">Add or update a student's mark for a subject.</p></div></section>
+<section class="panel">
+<h2>Add / update marks</h2>
+{% if students %}
+<form class="inline-form" method="post" action="{{ url_for('add_mark') }}">
+  <label>Student <select name="student_id" required>{% for s in students %}<option value="{{ s.id }}">{{ s.roll_number }} — {{ s.full_name }}</option>{% endfor %}</select></label>
+  <label>Subject <select name="subject" required>{% for subject in subjects %}<option>{{ subject }}</option>{% endfor %}</select></label>
+  <label>Marks obtained <input type="number" name="marks" min="0" step="0.01" required placeholder="e.g. 78"></label>
+  <label>Maximum marks <input type="number" name="max_marks" min="0.01" step="0.01" value="100" required></label>
+  <button class="button" type="submit">Save marks</button>
+</form>
+<p class="hint">Saving the same student + subject again updates the existing record.</p>
+{% else %}<p class="empty">Register a student before adding marks.</p>{% endif %}
+</section>
+<section class="panel">
+<h2>Marks records</h2>
+{% if records %}<div class="table-wrap"><table><thead><tr><th>Roll no.</th><th>Student</th><th>Class</th><th>Subject</th><th>Marks</th><th>Percentage</th><th>Action</th></tr></thead><tbody>
+{% for r in records %}<tr><td>{{ r.roll_number }}</td><td>{{ r.full_name }}</td><td>{{ r.class_name }}</td><td>{{ r.subject }}</td><td>{{ r.marks }} / {{ r.max_marks }}</td><td>{{ '%.2f'|format((r.marks|float / r.max_marks|float * 100) if r.max_marks|float else 0) }}%</td><td><form method="post" action="{{ url_for('delete_mark', mark_id=r.id) }}" onsubmit="return confirm('Delete this marks record?')"><button class="link-danger" type="submit">Delete</button></form></td></tr>{% endfor %}
+</tbody></table></div>{% else %}<p class="empty">No marks records yet.</p>{% endif %}
+</section>
+{% endblock %}
